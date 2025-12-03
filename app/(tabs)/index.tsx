@@ -1,35 +1,35 @@
 import { StyleSheet, Text, View } from "react-native";
-import TodoInput from "../../components/TodoInput";
-import TodoList from "../../components/TodoList";
-import useTodos from "../../hooks/useTodos";
+import TodoInput from "../components/TodoInput";
+import TodoList from "../components/TodoList";
+import { useTodos } from "../hooks/useTodos";
 
 export default function HomeScreen() {
-  const { todos, addTodo, removeTodo, toggleTodo } = useTodos();
+  const { todos, addTodo, removeTodo } = useTodos();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Simple Todo</Text>
 
-      <TodoInput addTodo={addTodo} />
-      <TodoList
-        todos={todos}
-        removeTodo={removeTodo}
-        toggleTodo={toggleTodo}
-      />
+      <TodoInput onAdd={addTodo} />
+
+      <TodoList items={todos} onDelete={removeTodo} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 80,
-    padding: 20
+    flex: 1,
+    padding: 20,
+    paddingTop: 60,
+    backgroundColor: "#ffffff",
   },
   title: {
+    fontSize: 26,
     textAlign: "center",
-    fontSize: 28,
-    marginBottom: 20,
     fontWeight: "bold",
-    color: "#6c47ff"
-  }
+    color: "#6c47ff",
+    marginBottom: 20,
+  },
 });
+
