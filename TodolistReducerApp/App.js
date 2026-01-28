@@ -1,35 +1,45 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Provider as PaperProvider } from 'react-native-paper';
-
-import HomeScreen from './screens/HomeScreen';
-import SecondScreen from './screens/SecondScreen';
-import CustomAppBar from './components/CustomAppBar';
-
-const Stack = createNativeStackNavigator();
+import React from 'react';
+import { View, StyleSheet, FlatList, Text, SafeAreaView } from 'react-native';
+import TodoInput from './components/TodoInput'; 
+import TodoItem from './components/TodoItem';   
+import { useTodos } from './hooks/useTodos';
 
 export default function App() {
+  const { todos, addTodo, toggleTodo, removeTodo } = useTodos();
+
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            header: (props) => <CustomAppBar {...props} />,
-          }}
-        >
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{ title: 'MD Nav Demo' }}
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Simple Todo</Text>
+
+      <TodoInput onAddTask={addTodo} />
+
+      <FlatList
+        data={todos}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TodoItem 
+            task={item} 
+            onToggle={toggleTodo} 
+            onRemove={removeTodo} 
           />
-          <Stack.Screen
-            name="Second"
-            component={SecondScreen}
-            options={{ title: 'MD Nav Demo' }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+        )}
+      />
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#6200ee', 
+  }
+});

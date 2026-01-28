@@ -1,40 +1,53 @@
-import { StyleSheet, Text, View } from "react-native";
-import TodoInput from "../../components/TodoInput";
-import TodoList from "../../components/TodoList";
-import { useTodos } from "../../hooks/useTodos";
+import React from 'react';
+import { StyleSheet, FlatList, Text, SafeAreaView, View } from 'react-native';
+import TodoInput from '../../components/TodoInput';
+import TodoItem from '../../components/TodoItem';
+import { useTodos } from '../../hooks/useTodos';
 
 export default function HomeScreen() {
   const { todos, addTodo, toggleTodo, removeTodo } = useTodos();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Simple Todo</Text>
 
-      <TodoInput onAdd={addTodo} />
+      <TodoInput onAddTask={addTodo} />
 
-      <TodoList
-        items={todos}
-        onToggle={toggleTodo}
-        onDelete={removeTodo}
+      <FlatList
+        data={todos}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TodoItem 
+            task={item} 
+            onToggle={toggleTodo} 
+            onRemove={removeTodo} 
+          />
+        )}
+        ListEmptyComponent={<Text style={styles.empty}>No tasks yet.</Text>}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    paddingTop: 60,
-    backgroundColor: "#ffffff",
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 26,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: "#6c47ff",
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
     marginBottom: 20,
+    color: '#6200ee',
   },
+  empty: {
+    textAlign: 'center',
+    marginTop: 20,
+    color: '#888',
+  }
 });
 
 
